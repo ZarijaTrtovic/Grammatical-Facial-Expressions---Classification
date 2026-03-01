@@ -19,3 +19,7 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# Large CSV files (>50MB)
+data/dataset_original.csv
+data/dataset_preprocessed.csv
