@@ -23,3 +23,10 @@ Thumbs.db
 # Large CSV files (>50MB)
 data/dataset_original.csv
 data/dataset_preprocessed.csv
+
+# LaTeX temporary files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
