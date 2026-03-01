@@ -34,17 +34,16 @@ This project analyzes and classifies 9 types of grammatical facial expressions u
 
 ## Data Files
 
-Due to GitHub file size limitations, the preprocessed CSV files are **not included** in this repository.
+Due to GitHub file size limitations, CSV files are provided in **gzip-compressed** format:
 
-**To reproduce the analysis:**
+- `data/dataset_original.csv.gz` - Original dataset (before preprocessing)
+- `data/dataset_preprocessed.csv.gz` - Preprocessed dataset (after cleaning and normalization)
 
-**Option 1: Download preprocessed data**
-- [Download from Google Drive](#) *(you can upload there later)*
-
-**Option 2: Generate from raw dataset**
-1. Download raw dataset from [UCI Repository](https://archive.ics.uci.edu/dataset/317/grammatical+facial+expressions)
-2. Run the preprocessing cells in the Jupyter notebook
-3. Preprocessed files will be saved in `data/` folder
+**To use:**
+```bash
+gunzip data/dataset_original.csv.gz
+gunzip data/dataset_preprocessed.csv.gz
+```
 
 ## Project Structure
 ```
