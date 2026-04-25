@@ -30,8 +30,15 @@ data/dataset_preprocessed.csv
 *.out
 *.toc
 *.synctex.gz
-*.tex
+
+# Backup files
+*.bak
+
+# Notebook duplicates (canonical copies live in figures/ and root)
 notebooks/confusion_matrix_best.png
 notebooks/model_comparison.png
 notebooks/model_results.csv
 notebooks/saved_models/
+
+# Claude Code
+CLAUDE.md
