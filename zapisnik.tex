@@ -188,7 +188,7 @@ Testiran $k \in \{50, 100, 150\}$.
 \label{fig:kbest}
 \end{figure}
 
-\textbf{Rezultat:} optimalno \textbf{k=150} (MLP Acc=0{,}9563). Top-10 feature-a sa najvećim F-skorom su X-koordinate tačaka oko usta (\texttt{41x, 42x, 52x, 97x, 51x, 98x, 40x, 62x, 50x, 39x}), što je intuitivno jer pokret usta nosi ključne informacije za gramatičke ekspresije.
+\textbf{Rezultat:} biramo \textbf{k=100} (MLP Acc=0{,}9422). Iako k=150 daje neznatno bolji skor (MLP Acc=0{,}9563), 100 feature-a daje vrlo slične rezultate uz 50 manje feature-a -- bolji trade-off između performansi i kompleksnosti modela. Top-10 feature-a sa najvećim F-skorom su X-koordinate tačaka oko usta (\texttt{41x, 42x, 52x, 97x, 51x, 98x, 40x, 62x, 50x, 39x}), što je intuitivno jer pokret usta nosi ključne informacije za gramatičke ekspresije.
 
 \subsection{KNN eksperiment -- izbor k}
 
@@ -227,7 +227,7 @@ Testirane arhitekture: (50), (100), (100,50), (100,100), (150,100), (200,100,50)
 \label{fig:mlp}
 \end{figure}
 
-\textbf{Rezultat:} najbolji skor postiže \textbf{(200, 100, 50)} arhitektura -- relu daje Acc=0{,}9792, a tanh Acc=0{,}9730. Performansa monotono raste sa kapacitetom mreže, bez znakova overfitting-a. U glavnom eksperimentu koristi se \textbf{(200, 100, 50) + tanh}.
+\textbf{Rezultat:} najbolji skor postiže \textbf{(200, 100, 50)} arhitektura -- relu daje Acc=0{,}9792, a tanh Acc=0{,}9730. Performansa uglavnom raste sa kapacitetom mreže, bez znakova overfitting-a. U glavnom eksperimentu koristi se \textbf{(200, 100, 50) + tanh}: iako je u ovom eksperimentu (na svih 300 atributa) relu neznatno bolji, u kombinaciji sa PCA(75) tanh se pokazao kao stabilniji izbor i daje najbolji ukupan rezultat (Acc=0{,}9817, vidi tabelu \ref{tab:top}).
 
 \subsection{SVM eksperiment -- kernel}
 
@@ -267,7 +267,7 @@ Neural Network (MLP) & \texttt{hidden\_layer\_sizes=(200, 100, 50), activation='
 
 \subsection{Dizajn eksperimenta}
 
-Svaki od 5 algoritama je treniran na \textbf{3 skupa atributa} (All\_Features, PCA\_75, KBest\_150) i \textbf{2 ciljna atributa} (Expression, Label) -- ukupno $5 \times 3 \times 2 = \mathbf{30}$ modela.
+Svaki od 5 algoritama je treniran na \textbf{3 skupa atributa} (All\_Features, PCA\_75, KBest\_100) i \textbf{2 ciljna atributa} (Expression, Label) -- ukupno $5 \times 3 \times 2 = \mathbf{30}$ modela.
 
 \subsection{Metrike}
 
@@ -286,14 +286,14 @@ Korišćene su standardne metrike: \textbf{Accuracy, Precision, Recall, F1-Score
 \textbf{Model} & \textbf{Features} & \textbf{Target} & \textbf{Acc} & \textbf{Prec} & \textbf{Rec} & \textbf{F1} \\
 \midrule
 Neural Network (MLP) & PCA\_75        & Expression & \textbf{0,9817} & 0,9818 & 0,9817 & 0,9817 \\
-Neural Network (MLP) & KBest\_150     & Expression & 0,9762 & 0,9763 & 0,9762 & 0,9762 \\
 Neural Network (MLP) & All\_Features  & Expression & 0,9730 & 0,9731 & 0,9730 & 0,9730 \\
+Neural Network (MLP) & KBest\_100     & Expression & 0,9594 & 0,9599 & 0,9594 & 0,9595 \\
 K-Nearest Neighbors  & PCA\_75        & Expression & 0,9418 & 0,9422 & 0,9418 & 0,9418 \\
 K-Nearest Neighbors  & All\_Features  & Expression & 0,9406 & 0,9410 & 0,9406 & 0,9405 \\
 Neural Network (MLP) & All\_Features  & Label      & 0,9401 & 0,9399 & 0,8871 & 0,9128 \\
 Neural Network (MLP) & PCA\_75        & Label      & 0,9368 & 0,9220 & 0,8973 & 0,9095 \\
-Neural Network (MLP) & KBest\_150     & Label      & 0,9361 & 0,9103 & 0,9089 & 0,9096 \\
-K-Nearest Neighbors  & KBest\_150     & Expression & 0,9295 & 0,9303 & 0,9295 & 0,9295 \\
+Neural Network (MLP) & KBest\_100     & Label      & 0,9345 & 0,9099 & 0,9044 & 0,9071 \\
+K-Nearest Neighbors  & KBest\_100     & Label      & 0,9139 & 0,9082 & 0,8416 & 0,8737 \\
 K-Nearest Neighbors  & All\_Features  & Label      & 0,9091 & 0,9064 & 0,8284 & 0,8657 \\
 \bottomrule
 \end{tabular}
@@ -309,11 +309,11 @@ K-Nearest Neighbors  & All\_Features  & Label      & 0,9091 & 0,9064 & 0,8284 & 
 \toprule
 \textbf{Algoritam} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
 \midrule
-Neural Network (MLP)   & 0,9573 & 0,9506 & 0,9374 & 0,9438 \\
-K-Nearest Neighbors    & 0,9223 & 0,9201 & 0,8822 & 0,9002 \\
-Support Vector Machine & 0,8782 & 0,8833 & 0,8171 & 0,8474 \\
-Decision Tree          & 0,8706 & 0,8598 & 0,8262 & 0,8421 \\
-Logistic Regression    & 0,7806 & 0,7733 & 0,6949 & 0,7291 \\
+Neural Network (MLP)   & 0,9542 & 0,9478 & 0,9338 & 0,9406 \\
+K-Nearest Neighbors    & 0,9194 & 0,9176 & 0,8807 & 0,8982 \\
+Support Vector Machine & 0,8670 & 0,8727 & 0,8044 & 0,8355 \\
+Decision Tree          & 0,8631 & 0,8547 & 0,8155 & 0,8339 \\
+Logistic Regression    & 0,7693 & 0,7622 & 0,6821 & 0,7167 \\
 \bottomrule
 \end{tabular}
 \caption{Prosečne performanse po algoritmu (6 kombinacija po algoritmu).}
@@ -329,7 +329,7 @@ Logistic Regression    & 0,7806 & 0,7733 & 0,6949 & 0,7291 \\
 \midrule
 All\_Features (300) & 0,8964 & 0,8937 & 0,8486 & 0,8697 \\
 PCA\_75             & 0,8792 & 0,8746 & 0,8249 & 0,8476 \\
-KBest\_150          & 0,8698 & 0,8639 & 0,8211 & 0,8403 \\
+KBest\_100          & 0,8482 & 0,8447 & 0,7964 & 0,8177 \\
 \bottomrule
 \end{tabular}
 \caption{Prosečne performanse po feature setu (10 modela po setu).}
@@ -389,7 +389,7 @@ Per-class analiza svih 5 algoritama (Expression, All\_Features) prikazana je na 
 
 Glavni nalazi:
 \begin{itemize}
-    \item Sve klase imaju \textbf{F1 $>$ 0{,}92} za MLP i KNN.
+    \item Sve klase imaju \textbf{F1 $\geq$ 0{,}92} za MLP i KNN.
     \item \textbf{Logistic Regression} je jedini algoritam sa kombinacijama F1 $<$ 0{,}80 -- za 6 od 9 klasa (npr. \texttt{affirmative} F1=0{,}66, \texttt{topics} F1=0{,}73), što potvrđuje da problem nije linearno separabilan.
     \item \texttt{wh\_question} se najlakše prepoznaje (F1 $\approx$ 0{,}99 kod MLP) jer ima karakteristične pokrete obrva.
 \end{itemize}
@@ -478,11 +478,11 @@ Radi provere generalizacije, svaki algoritam je evaluiran i pomoću \texttt{Stra
 \toprule
 \textbf{Algoritam} & \textbf{Mean Accuracy} & \textbf{Std} \\
 \midrule
-MLP (100, 50)         & \textbf{0,9693} & 0,0043 \\
-KNN (k=5)             & 0,9407 & 0,0021 \\
-SVM (rbf, C=1)        & 0,9027 & 0,0035 \\
-Decision Tree (d=15)  & 0,8242 & 0,0069 \\
-Logistic Regression   & 0,7451 & 0,0037 \\
+MLP (200,100,50), tanh & \textbf{0,9786} & 0,0018 \\
+KNN (k=5)              & 0,9407 & 0,0021 \\
+SVM (rbf, C=1)         & 0,9027 & 0,0035 \\
+Decision Tree (d=15)   & 0,8242 & 0,0069 \\
+Logistic Regression    & 0,7451 & 0,0037 \\
 \bottomrule
 \end{tabular}
 \caption{Cross-validation rezultati (5-fold, PCA\_75, Expression).}
@@ -499,9 +499,9 @@ Za svaki od 5 algoritama sačuvan je \textbf{najbolji model} (po accuracy) u \te
 
 \begin{itemize}
     \item Najbolji model: \textbf{Neural Network (MLP)} sa \textbf{PCA(75)} redukcijom za cilj \texttt{expression} -- \textbf{Accuracy = 98{,}17\,\%}, F1 = 98{,}17\,\%.
-    \item Rangiranje algoritama (po prosečnoj accuracy): \textbf{MLP $>$ KNN $>$ SVM $>$ DT $>$ LR}. Slaba performansa Logističke regresije ($\sim$78\,\%) potvrđuje da problem \textbf{nije linearno separabilan}.
+    \item Rangiranje algoritama (po prosečnoj accuracy): \textbf{MLP $>$ KNN $>$ SVM $>$ DT $>$ LR}. Slaba performansa Logističke regresije ($\sim$77\,\%) potvrđuje da problem \textbf{nije linearno separabilan}.
     \item PCA(75) zadržava 99{,}78\,\% varijanse i za MLP daje \emph{bolji} rezultat od svih 300 atributa, dejstvom kao regularizacija. Za jednostavnije modele (LR, DT, SVM), potpun skup atributa je u proseku najbolji.
-    \item \texttt{SelectKBest(150)} je u proseku najlošiji jer ANOVA F-test favorizuje pojedinačne feature-e zanemarujući njihove interakcije; ipak, za MLP daje skor blizu PCA varijante (0{,}9762).
+    \item \texttt{SelectKBest(100)} je u proseku najlošiji jer ANOVA F-test favorizuje pojedinačne feature-e zanemarujući njihove interakcije; za MLP daje Acc=0{,}9594 (oko 2{,}2 p.p. ispod PCA varijante od 0{,}9817).
     \item Dva ciljna atributa: klasifikacija \textbf{9 tipova ekspresija} je iznenađujuće \emph{lakša} (najbolja Acc 98\,\%) od binarne \texttt{label} klasifikacije (najbolja Acc 94\,\%), jer je binarna agregacija previše heterogena (obuhvata sve aktivne ekspresije pod jednom oznakom), a uz to pati od class imbalance-a 65:35.
     \item \textbf{Veličina klase ne utiče} značajno na performansu (korelacija $-0{,}09$) -- model se ne raspada kod manjih klasa.
     \item GridSearchCV tuning donosi značajna poboljšanja samo za jednostavnije modele (SVM +5{,}9 p.p., DT +2{,}0 p.p.); MLP je već blizu optimalnog sa default konfiguracijom.
